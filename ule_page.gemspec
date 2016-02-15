@@ -29,5 +29,28 @@ Gem::Specification.new do |spec|
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
-  spec.add_development_dependency "rspec", "~> 3.0"
+  spec.add_development_dependency("activesupport")
+
+
+  spec.add_dependency("site_prism")
+  # spec.add_dependency("actionview")
+  spec.add_dependency("capybara")
+  spec.add_dependency("capybara-webkit")
+  spec.add_dependency("selenium-webdriver")
+  spec.add_dependency("rspec", "~> 3.0")
+  spec.add_dependency("activesupport")
+
+  spec.add_development_dependency("rails")
+  spec.add_development_dependency("rspec-rails")
+
+  spec.add_development_dependency("rspec-its", "~> 1.0")
+  spec.add_development_dependency("cucumber", "~> 1.3.15")
+  spec.add_development_dependency("simplecov")
+  # spec.add_development_dependency("aruba")
+  # spec.add_development_dependency("mocha", ">= 0.12.8")
+  # spec.add_development_dependency("bourne")
+  # spec.add_development_dependency("appraisal", "~> 2.1.0")
+  spec.add_development_dependency("activerecord", ">= 3.0.0")
+  spec.add_development_dependency("yard")
+
 end
