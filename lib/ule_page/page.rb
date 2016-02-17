@@ -12,12 +12,11 @@ module UlePage
     include UlePage::Helper
     extend UlePage::SitePrismExtender
     include RSpec::Matchers
-    # include Page::Sidebar
     # include ActionView::Helpers::NumberHelper
 
     # e.g. is_order_detail?
     def self.inherited(subclass)
-      method_name = "is_#{subclass.superclass.name.demodulize.singularize.underscore}_#{subclass.name.demodulize.singularize.underscore}?"
+      method_name = "is_#{subclass.parent.name.demodulize.singularize.underscore}_#{subclass.name.demodulize.singularize.underscore}?"
       subclass.send(:define_method, method_name) do
         true
       end
