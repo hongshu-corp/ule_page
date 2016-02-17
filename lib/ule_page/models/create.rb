@@ -1,7 +1,7 @@
 require 'ule_page/page'
 
 module UlePage
-  class CreateBase < Base
+  class Create < Page
     element :create_button, 'input[type="submit"]'
 
     def submit

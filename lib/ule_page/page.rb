@@ -5,10 +5,9 @@ require 'capybara'
 require 'ule_page/site_prism_extender'
 require 'ule_page/helper'
 require 'active_support/inflector'
-# require_relative 'sidebar'
 
 module UlePage
-  class Base < SitePrism::Page
+  class Page < SitePrism::Page
     include Capybara::DSL
     include UlePage::Helper
     extend UlePage::SitePrismExtender
@@ -25,8 +24,7 @@ module UlePage
     end
 
     def open(expansion = {})
-      self.load expansion unless get_current_page.class == self.class
-
+      self.load expansion
       self
     end
 

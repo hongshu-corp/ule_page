@@ -1,6 +1,6 @@
 require 'ule_page/page'
 
 module UlePage
-  class DetailsBase < Base
+  class Detail < Page
   end
 end

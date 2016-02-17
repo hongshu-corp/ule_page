@@ -39,6 +39,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency("selenium-webdriver")
   spec.add_dependency("rspec", "~> 3.0")
   spec.add_dependency("activesupport")
+  spec.add_dependency("activerecord")
 
   spec.add_development_dependency("rails")
   spec.add_development_dependency("rspec-rails")

@@ -1,7 +1,7 @@
 require 'ule_page/page'
 
 module UlePage
-  class IndexBase < Base
+  class Index < Page
     element_collection :rows, 'tbody tr'
 
     def goto_edit

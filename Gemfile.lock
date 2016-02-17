@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    ule_page (0.1.0)
+    ule_page (0.0.1)
+      activerecord
       activesupport
       capybara
       capybara-webkit
