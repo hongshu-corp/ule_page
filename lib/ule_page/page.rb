@@ -12,7 +12,6 @@ module UlePage
     include UlePage::Helper
     extend UlePage::SitePrismExtender
     include RSpec::Matchers
-    # include ActionView::Helpers::NumberHelper
 
     # e.g. is_order_detail?
     def self.inherited(subclass)

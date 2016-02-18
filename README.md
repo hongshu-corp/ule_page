@@ -40,20 +40,20 @@ Or install it yourself as:
 Open your features/support/env.rb, add the following lines:
 ```ruby
 require 'ule_page'
-UlePage.setup do |config|
+  UlePage.setup do |config|
 end
 ```
 And in features/support/helper.rb, add lines:
 ```ruby
   include UlePage::Helper
 
-def pg
-  special_maps = {
-    '/' => Page::Homes::Index.new # or something eles, based on your page model
-  }
+  def pg
+    special_maps = {
+      '/' => Page::Homes::Index.new # or something eles, based on your page model
+    }
 
-  return UlePage::ModelMatch.get_current_page_with_wait special_maps
-end
+    return UlePage::ModelMatch.get_current_page_with_wait special_maps
+  end
 
 ```
 After that, you can define your page model.
