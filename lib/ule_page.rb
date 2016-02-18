@@ -27,6 +27,11 @@ module UlePage
   @@map_initialized = false
 
   def self.setup
+    UlePage::Page.send(:include, Rails.application.routes.url_helpers) if defined? Rails
+    UlePage::Page.send(:include, ActionView::Helpers::NumberHelper) if defined? ActionView
+
+    self.add_models
+
     yield self
   end
 
@@ -38,3 +43,5 @@ module UlePage
     end
   end
 end
+
+
