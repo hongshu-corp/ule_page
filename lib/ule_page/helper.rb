@@ -5,9 +5,6 @@ module UlePage
 
     def wait_for_ajax
       page.has_css?('.pace-small .pace-inactive')
-      # Timeout.timeout(Capybara.default_wait_time) do
-      #   loop until finished_all_ajax_requests?
-      # end
     end
 
     def finished_all_ajax_requests?
@@ -17,24 +14,6 @@ module UlePage
     def visit_admin_pages
       visit '/admin'
     end
-
-    # def signin(user)
-    #   token = User.new_remember_token
-
-    #   if need_run_javascript
-    #     if Capybara.current_driver == :selenium
-    #       visit_admin_pages
-    #       page.driver.browser.manage.delete_all_cookies
-    #       Capybara.current_session.driver.browser.manage.add_cookie :name => 'remember_token', :value => token
-    #     else
-    #       page.driver.set_cookie("remember_token", token)
-    #     end
-    #   else
-    #     Capybara.current_session.driver.browser.set_cookie("remember_token=#{token}")
-    #   end
-
-    #   user.update_attribute(:remember_token, User.encrypt(token))
-    # end
 
     def signout
       browser = Capybara.current_session.driver.browser

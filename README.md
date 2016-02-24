@@ -1,6 +1,6 @@
 # UlePage
 
-Welcome to your new gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ule_page`. To experiment with that code, run `bin/console` for an interactive prompt.
+Welcome to UlePage gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ule_page`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 Using UlePage, you can define page model object easily. e.g.
 ```ruby
@@ -30,18 +30,24 @@ gem 'ule_page'
 
 And then execute:
 
-    $ bundle
+  $ bundle
 
 Or install it yourself as:
 
-    $ gem install ule_page
+  $ gem install ule_page
 
 ## Usage
 Open your features/support/env.rb, add the following lines:
 ```ruby
 require 'ule_page'
-  UlePage.setup do |config|
+UlePage.setup do |config|
+  #add customised content
 end
+```
+# Important:
+Make sure the above lines in front of the screenshot requiring, or you can not get screenshot when you get errors.
+```ruby
+require 'capybara-screenshot/cucumber'
 ```
 And in features/support/helper.rb, add lines:
 ```ruby
@@ -49,7 +55,7 @@ And in features/support/helper.rb, add lines:
 
   def pg
     special_maps = {
-      '/' => Page::Homes::Index.new # or something eles, based on your page model
+      '/' => Page::Homes::Index.new # or something else, based on your page model
     }
 
     return UlePage::ModelMatch.get_current_page_with_wait special_maps
@@ -77,7 +83,7 @@ To install this gem onto your local machine, run `bundle exec rake install`. To 
 
 ## Contributing
 
-Bug reports and pull requests are welcome on GitHub at https://github.com/jerecui/ule_page. This project is intended to be a safe, welcoming space for collaboration, and contributors are expected to adhere to the [Contributor Covenant](http://contributor-covenant.org) code of conduct.
+Bug reports and pull requests are welcome on GitHub at https://github.com/jerecui/ule_page.
 
 
 ## License

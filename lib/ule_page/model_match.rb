@@ -37,9 +37,9 @@ module UlePage
             pluralized = model.to_s.underscore.pluralize
             page_module_name = model.to_s.pluralize.camelize
 
-            next unless Object.const_defined?("Page::#{page_module_name}")
+            next unless Object.const_defined?("#{UlePage.module_name}::#{page_module_name}")
 
-            page_module = Object.const_get("Page").const_get(page_module_name)
+            page_module = Object.const_get(UlePage.module_name).const_get(page_module_name)
             UlePage.map["/#{pluralized}"] = page_module.const_get("Index").try(:new) rescue false
             UlePage.map["/#{pluralized}/new"] = page_module.const_get("Create").new rescue false
             UlePage.map["/#{pluralized}/:id"] = page_module.const_get("Details").new rescue false

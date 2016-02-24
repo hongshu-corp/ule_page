@@ -3,7 +3,6 @@ require 'ule_page'
 require 'capybara'
 require 'capybara/dsl'
 require 'site_prism'
-require 'selenium-webdriver'
 
 class MyTest
   def response

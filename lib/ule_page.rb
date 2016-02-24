@@ -26,6 +26,9 @@ module UlePage
   mattr_accessor :map_initialized
   @@map_initialized = false
 
+  mattr_accessor :module_name
+  @@module_name = "Page"
+
   def self.setup
     UlePage::Page.send(:include, Rails.application.routes.url_helpers) if defined? Rails
     UlePage::Page.send(:include, ActionView::Helpers::NumberHelper) if defined? ActionView
