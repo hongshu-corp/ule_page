@@ -1,6 +1,7 @@
 require "ule_page/version"
 require 'rails'
 require 'active_record'
+require 'ule_page/page_map'
 require 'site_prism'
 
 module UlePage

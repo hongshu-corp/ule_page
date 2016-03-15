@@ -12,7 +12,7 @@ module UlePage
         current = get_current_page special_maps
 
         if !current_path.nil? && current.nil?
-          p "current path is #{current_path}, we can not get the page model, please add it to the get_current_page map. (helper.rb)"
+          p "current path is #{current_path}, we can not get the page model, please define the set_urls for the page model."
 
           raise
         end
@@ -21,35 +21,8 @@ module UlePage
       end
 
       def get_current_page(special_maps = {})
-        resources = UlePage.resource_models || []
+        map = prepare_maps special_maps
 
-        if !UlePage.map_initialized || UlePage.special_maps.empty?
-          UlePage.special_maps = special_maps
-          UlePage.map = UlePage.special_maps
-
-          # => to generate the following
-          # '/customers' => Page::Customers::Index.new,
-          # '/customers/new' => Page::Customers::Create.new,
-          # '/customers/:id' => Page::Customers::Details.new,
-          # '/customers/:id/edit' => Page::Customers::Edit.new,
-          resources.each do |model|
-
-            pluralized = model.to_s.underscore.pluralize
-            page_module_name = model.to_s.pluralize.camelize
-
-            next unless Object.const_defined?("#{UlePage.module_name}::#{page_module_name}")
-
-            page_module = Object.const_get(UlePage.module_name).const_get(page_module_name)
-            UlePage.map["/#{pluralized}"] = page_module.const_get("Index").try(:new) rescue false
-            UlePage.map["/#{pluralized}/new"] = page_module.const_get("Create").new rescue false
-            UlePage.map["/#{pluralized}/:id"] = page_module.const_get("Details").new rescue false
-            UlePage.map["/#{pluralized}/:id/edit"] = page_module.const_get("Edit").new rescue false
-          end
-
-          UlePage.map_initialized = true
-        end
-
-        map = UlePage.map
         return nil unless current_path
 
         current = get_model map, current_path
@@ -59,6 +32,22 @@ module UlePage
         end
 
         current
+      end
+
+      def prepare_maps(special_maps)
+        if !UlePage.map_initialized || UlePage.special_maps.empty?
+          UlePage.special_maps = special_maps
+          UlePage.map = {}
+
+          generate_map_by_convention UlePage.map, UlePage.resource_models
+
+          UlePage.map.merge! UlePage.special_maps if UlePage.special_maps.any?
+          UlePage.map.merge! UlePage::PageMap.instance.pages
+
+          UlePage.map_initialized = true
+        end
+
+        UlePage.map
       end
 
       def get_model(map, path)
@@ -77,6 +66,29 @@ module UlePage
         end
 
         nil
+      end
+
+      private
+      def generate_map_by_convention(map, resources)
+        resources ||= []
+        # => to generate the following
+        # '/customers' => Page::Customers::Index.new,
+        # '/customers/new' => Page::Customers::Create.new,
+        # '/customers/:id' => Page::Customers::Details.new,
+        # '/customers/:id/edit' => Page::Customers::Edit.new,
+        resources.each do |model|
+
+          pluralized = model.to_s.underscore.pluralize
+          page_module_name = model.to_s.pluralize.camelize
+
+          next unless Object.const_defined?("#{UlePage.module_name}::#{page_module_name}")
+
+          page_module = Object.const_get(UlePage.module_name).const_get(page_module_name)
+          map["/#{pluralized}"] = page_module.const_get("Index").try(:new) rescue false
+          map["/#{pluralized}/new"] = page_module.const_get("Create").new rescue false
+          map["/#{pluralized}/:id"] = page_module.const_get("Details").new rescue false
+          map["/#{pluralized}/:id/edit"] = page_module.const_get("Edit").new rescue false
+        end
       end
     end
   end

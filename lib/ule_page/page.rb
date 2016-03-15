@@ -4,6 +4,7 @@ require 'rspec/expectations'
 require 'capybara'
 require 'ule_page/site_prism_extender'
 require 'ule_page/helper'
+require 'ule_page/page_map'
 require 'active_support/inflector'
 
 module UlePage
@@ -12,6 +13,16 @@ module UlePage
     include UlePage::Helper
     extend UlePage::SitePrismExtender
     include RSpec::Matchers
+
+    @@urls  = []
+    def self.set_urls(urls = [])
+      @@urls = urls
+      add_to_page_map @@urls
+    end
+
+    def self.urls
+      @@urls
+    end
 
     # e.g. is_order_detail?
     def self.inherited(subclass)
@@ -114,7 +125,11 @@ module UlePage
     def go_back
       click_link_or_button '返回'
     end
+
+    private
+    def self.add_to_page_map(urls = [])
+      urls.each {|x| PageMap.instance.pages[x] = self } unless urls.nil?
+    end
+
   end
-
-
 end
