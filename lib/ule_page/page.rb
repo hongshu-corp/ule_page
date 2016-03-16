@@ -15,7 +15,7 @@ module UlePage
     include RSpec::Matchers
 
     @@urls  = []
-    def self.set_urls(urls = [])
+    def self.set_urls(*urls)
       @@urls = urls
       add_to_page_map @@urls
     end

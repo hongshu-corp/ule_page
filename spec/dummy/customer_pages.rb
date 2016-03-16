@@ -3,7 +3,7 @@ require 'ule_page'
 module Page
   module Customers
     class Index < UlePage::Index
-      set_urls ['/customers', '/admin/customers']
+      set_urls '/customers', '/admin/customers'
 
     end
 
