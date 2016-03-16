@@ -2,6 +2,9 @@ require 'capybara'
 
 module UlePage
   module Helper
+    def pg
+      UlePage::ModelMatch.get_current_page_with_wait {}
+    end
 
     def wait_for_ajax
       page.has_css?('.pace-small .pace-inactive')
