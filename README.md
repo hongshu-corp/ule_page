@@ -2,7 +2,7 @@
 
 Welcome to UlePage gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ule_page`. To experiment with that code, run `bin/console` for an interactive prompt.
 
-Using UlePage, you can define page model object easily. e.g.
+Using UlePage, you can define page model object easily and the gem can match the current url to the specific page model with 'pg' method. e.g.
 ```ruby
 module Page
   module Customers
@@ -15,7 +15,23 @@ module Page
         submit
       end
     end
+
+    class Index < UlePage::Index
+      set_urls '/customers', '/organization/:organization_id/customers'
+
+      def has_customer?(customer)
+        check_have_hashtable_content customer, [ :name, :phone, :address ]
+      end
+
+    end
   end
+end
+
+Given(/^home page has something$/) do |table|
+  visit '/'
+  click_link 'customers' # goto customer index pages.
+
+  pg.has_customer? table.hashes[0] # called customer index page method.
 end
 
 ```
@@ -44,7 +60,7 @@ UlePage.setup do |config|
   #add customised content
 end
 ```
-# Important:
+### Important:
 Make sure the above lines in front of the screenshot requiring, or you can not get screenshot when you get errors.
 ```ruby
 require 'capybara-screenshot/cucumber'
@@ -52,14 +68,6 @@ require 'capybara-screenshot/cucumber'
 And in features/support/helper.rb, add lines:
 ```ruby
   include UlePage::Helper
-
-  def pg
-    special_maps = {
-      '/' => Page::Homes::Index.new # or something else, based on your page model
-    }
-
-    return UlePage::ModelMatch.get_current_page_with_wait special_maps
-  end
 
 ```
 After that, you can define your page model.
@@ -73,7 +81,25 @@ UlePage will map crud page model automatically, say, if you have a model custome
   '/customers/:id/edit' => Page::Customers::Edit
 }
 ```
+If the page model is not the CRUD with simple, you can set urls manually on the page model.
+```ruby
+class Index < UlePage::Index
+  set_urls '/orders', '/customer/:customer_id/orders'
+
+  # ...
+end
+
+```
+
+
 In cucumber step files, you can use pg.xxx, pg will get your defined model automatically via current_url.
+
+```ruby
+Given(/^home page has something$/) do
+  visit '/'
+  pg.has_something # you need to implement has_something method in the home_page page model.
+end
+```
 
 ## Development
 

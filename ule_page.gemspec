@@ -10,9 +10,10 @@ Gem::Specification.new do |spec|
   spec.email         = ["tsuijy@gmail.com"]
 
   spec.summary       = %q{ Page model for cucumber test.}
-  spec.description   = %q{ Based on the siteprism gem, add more page methods.}
+  spec.description   = %q{ Based on the siteprism gem, add more page methods and looking for page model via current_path.}
   spec.homepage      = "https://github.com/jerecui/ule_page"
   spec.license       = "MIT"
+
 
   # Prevent pushing this gem to RubyGems.org by setting 'allowed_push_host', or
   # delete this section to allow pushing this gem to any host.
@@ -26,6 +27,9 @@ Gem::Specification.new do |spec|
   spec.bindir        = "exe"
   spec.executables   = spec.files.grep(%r{^exe/}) { |f| File.basename(f) }
   spec.require_paths = ["lib"]
+
+  spec.required_ruby_version = '>= 1.9.3'
+  spec.platform    = Gem::Platform::RUBY
 
   spec.add_development_dependency "bundler", "~> 1.11"
   spec.add_development_dependency "rake", "~> 10.0"
