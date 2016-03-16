@@ -14,14 +14,15 @@ module UlePage
     extend UlePage::SitePrismExtender
     include RSpec::Matchers
 
-    @@urls  = []
+    @urls  = []
     def self.set_urls(*urls)
-      @@urls = urls
-      add_to_page_map @@urls
+      @urls = urls
+      add_to_page_map @urls
+      set_first_url
     end
 
     def self.urls
-      @@urls
+      @urls
     end
 
     # e.g. is_order_detail?
@@ -129,6 +130,14 @@ module UlePage
     private
     def self.add_to_page_map(urls = [])
       urls.each {|x| PageMap.instance.pages[x] = self.new } unless urls.nil?
+    end
+
+    def self.set_first_url
+      if @urls.any?
+        first_url = @urls.first
+        first_url = first_url.gsub /:(\w+)/, '{\1}'
+        set_url first_url
+      end
     end
 
   end
