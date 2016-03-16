@@ -128,7 +128,7 @@ module UlePage
 
     private
     def self.add_to_page_map(urls = [])
-      urls.each {|x| PageMap.instance.pages[x] = self } unless urls.nil?
+      urls.each {|x| PageMap.instance.pages[x] = self.new } unless urls.nil?
     end
 
   end
