@@ -1,5 +1,7 @@
 # UlePage
 
+[![Build Status](https://travis-ci.org/jerecui/ule_page.svg?branch=master)](https://travis-ci.org/jerecui/ule_page)
+
 Welcome to UlePage gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ule_page`. To experiment with that code, run `bin/console` for an interactive prompt.
 
 Using UlePage, you can define page model object easily and the gem can match the current url to the specific page model with 'pg' method. e.g.
