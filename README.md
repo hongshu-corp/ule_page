@@ -1,6 +1,9 @@
 # UlePage
 
+[![Gem Version](https://badge.fury.io/rb/ule_page.svg)](https://badge.fury.io/rb/ule_page)
 [![Build Status](https://travis-ci.org/jerecui/ule_page.svg?branch=master)](https://travis-ci.org/jerecui/ule_page)
+[![Coverage Status](https://coveralls.io/repos/jerecui/ule_page/badge.svg?branch=master)](https://coveralls.io/r/jerecui/ule_page?branch=master)
+[![License](https://img.shields.io/github/license/RubyMoney/money.svg)](http://opensource.org/licenses/MIT)
 
 Welcome to UlePage gem! In this directory, you'll find the files you need to be able to package up your Ruby library into a gem. Put your Ruby code in the file `lib/ule_page`. To experiment with that code, run `bin/console` for an interactive prompt.
 
