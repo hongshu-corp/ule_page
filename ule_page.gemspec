@@ -47,7 +47,6 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency "rspec-its", "~> 1.0"
   spec.add_development_dependency "cucumber", "~> 1.3.15"
   spec.add_development_dependency "simplecov"
-  spec.add_development_dependency "activerecord", ">= 3.0.0"
   spec.add_development_dependency "yard"
 
 end
