@@ -6,6 +6,7 @@ require 'ule_page/site_prism_extender'
 require 'ule_page/helper'
 require 'ule_page/page_map'
 require 'active_support/inflector'
+require 'active_support/hash_with_indifferent_access'
 
 module UlePage
   class Page < SitePrism::Page
@@ -44,6 +45,8 @@ module UlePage
     # fill_form hashtable
     # if the fields is empty, it will use all the keys of the hashtable
     def fill_form(hashtable, fields = [], map = {})
+      hashtable, map = wrapper_hash(hashtable), wrapper_hash(map)
+
       fields = hashtable.keys.map { |k| k.to_sym } if fields.empty?
 
       fields.each do |f|
@@ -65,6 +68,8 @@ module UlePage
     # precondition:
     # there are the elements mapped to the hashtable keys.
     def check_form(hashtable, fields = [], map = {})
+      hashtable, map = wrapper_hash(hashtable), wrapper_hash(map)
+
       fields = hashtable.keys.map { |k| k.to_sym } if fields.empty?
 
       fields.each do |f|
@@ -91,6 +96,7 @@ module UlePage
     # usage: check_have_hashtable_content hashtable
     # usage: check_have_hashtable_content hashtable, [:id, :name]
     def check_have_hashtable_content(hashtable, keys = [])
+      hashtable = wrapper_hash(hashtable)
       keys = hashtable.keys if keys.empty?
 
       keys.each do |k|
@@ -99,6 +105,8 @@ module UlePage
     end
 
     def check_have_no_hashtable_content(hashtable, keys = [])
+      hashtable = wrapper_hash(hashtable)
+
       keys = hashtable.keys if keys.empty?
 
       keys.each do |k|
@@ -130,6 +138,10 @@ module UlePage
     private
     def self.add_to_page_map(urls = [])
       urls.each {|x| PageMap.instance.pages[x] = self.new } unless urls.nil?
+    end
+
+    def wrapper_hash(hash)
+      ActiveSupport::HashWithIndifferentAccess.new hash
     end
 
     def self.set_first_url
