@@ -144,6 +144,7 @@ module UlePage
     end
 
     def wrapper_hash(hash)
+      return hash unless hash.is_a?(Hash)
       ActiveSupport::HashWithIndifferentAccess.new hash
     end
 
