@@ -34,6 +34,10 @@ class MockSet
     args
   end
 
+  def tag_name
+    "input"
+  end
+
   def [](key)
     nil
   end

@@ -53,11 +53,13 @@ module UlePage
         key = f
         key = map[f] if map.has_key?(f)
 
-        # p "setting #{f} with #{hashtable[key.to_s]}"
-        if send(f).send(:[], :type) == "checkbox"
+        tag, it = send(f).send(:tag_name), send(f).send(:[], :type)
+        if tag == "input" && it == "checkbox"
           send(f).send(:set, hashtable[key] == 'true')
+        elsif tag == "select"
+          send(f).send(:select, hashtable[key])
         else
-          send(f).send(:set, hashtable[key]) or send(f).send(:select, hashtable[key])
+          send(f).send(:set, hashtable[key])
         end
       end
     end
@@ -88,32 +90,43 @@ module UlePage
       end
     end
 
-    def check_have_content(content)
-      page.should have_content content
+    def check_have_content(content, container = nil)
+      container ||= page
+      if container.respond_to?(:has_text?)
+        expect(container.has_text?(content)).to be_truthy
+      else
+        expect(container).to have_content(content)
+      end
+
     end
 
-    def check_have_not_content(content)
-      expect(page).to have_no_content(content)
+    def check_have_not_content(content, container = nil)
+      container ||= page
+      if container.respond_to?(:has_no_text?)
+        expect(container.has_no_text?(content)).to be_truthy
+      else
+        expect(container).not_to have_content(content)
+      end
     end
 
     # usage: check_have_hashtable_content hashtable
     # usage: check_have_hashtable_content hashtable, [:id, :name]
-    def check_have_hashtable_content(hashtable, keys = [])
+    def check_have_hashtable_content(hashtable, keys = [], container = nil)
       hashtable = wrapper_hash(hashtable)
       keys = hashtable.keys if keys.empty?
 
       keys.each do |k|
-        check_have_content hashtable[k.to_s]
+        check_have_content hashtable[k.to_s], container
       end
     end
 
-    def check_have_no_hashtable_content(hashtable, keys = [])
+    def check_have_no_hashtable_content(hashtable, keys = [], container = nil)
       hashtable = wrapper_hash(hashtable)
 
       keys = hashtable.keys if keys.empty?
 
       keys.each do |k|
-        check_have_not_content hashtable[k.to_s]
+        check_have_not_content hashtable[k.to_s], container
       end
     end
 

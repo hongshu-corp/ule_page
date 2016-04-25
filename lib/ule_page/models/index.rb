@@ -3,6 +3,7 @@ require 'ule_page/page'
 module UlePage
   class Index < Page
     element_collection :rows, 'tbody tr'
+    element :table, 'table'
 
     def goto_edit
       click_link_or_button '编辑'
