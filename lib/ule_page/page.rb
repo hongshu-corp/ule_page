@@ -54,8 +54,11 @@ module UlePage
         key = map[f] if map.has_key?(f)
 
         # p "setting #{f} with #{hashtable[key.to_s]}"
-
-        send(f).send(:set, hashtable[key]) or send(f).send(:select, hashtable[key]) if self.respond_to? f.to_sym
+        if send(f).send(:[], :type) && send(f).send(:[], :type) == "checkbox"
+          send(f).send(:set, hashtable[key] == 'true')
+        else
+          send(f).send(:set, hashtable[key]) or send(f).send(:select, hashtable[key])
+        end
       end
     end
 
