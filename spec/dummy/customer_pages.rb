@@ -33,6 +33,10 @@ class MockSet
     recorder[selector] = args
     args
   end
+
+  def [](key)
+    nil
+  end
 end
 
 module Page
