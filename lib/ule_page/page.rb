@@ -116,7 +116,12 @@ module UlePage
       keys = hashtable.keys if keys.empty?
 
       keys.each do |k|
-        check_have_content hashtable[k.to_s], container
+        begin
+          check_have_content hashtable[k.to_s], container
+        rescue RSpec::Expectations::ExpectationNotMetError => e
+          puts "The key: '#{k}'' has no matched content!!"
+          raise
+        end
       end
     end
 
