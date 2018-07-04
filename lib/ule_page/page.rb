@@ -15,7 +15,7 @@ module UlePage
     extend UlePage::SitePrismExtender
     include RSpec::Matchers
 
-    @urls  = []
+    @urls = []
     def self.set_urls(*urls)
       @urls = urls
       add_to_page_map @urls
@@ -35,7 +35,7 @@ module UlePage
     end
 
     def open(expansion = {})
-      self.load expansion
+      load expansion
       self
     end
 
@@ -47,19 +47,21 @@ module UlePage
     def fill_form(hashtable, fields = [], map = {})
       hashtable, map = wrapper_hash(hashtable), wrapper_hash(map)
 
-      fields = hashtable.keys.map { |k| k.to_sym } if fields.empty?
+      fields = hashtable.keys.map(&:to_sym) if fields.empty?
 
       fields.each do |f|
         key = f
-        key = map[f] if map.has_key?(f)
+        key = map[f] if map.key?(f)
 
-        tag, it = send(f).send(:tag_name), send(f).send(:[], :type)
-        if tag == "input" && it == "checkbox"
-          send(f).send(:set, hashtable[key] == 'true')
-        elsif tag == "select"
-          send(f).send(:select, hashtable[key])
+        el, val = send(f), hashtable[key]
+        tag, it = el.send(:tag_name), el.send(:[], :type)
+
+        if tag == 'input' && it == 'checkbox' # checkbox
+          el.send(:set, val == 'true')
+        elsif tag == 'select' # select
+          el.send(:select, val)
         else
-          send(f).send(:set, hashtable[key])
+          el.send(:set, val)
         end
       end
     end
@@ -75,18 +77,17 @@ module UlePage
     def check_form(hashtable, fields = [], map = {})
       hashtable, map = wrapper_hash(hashtable), wrapper_hash(map)
 
-      fields = hashtable.keys.map { |k| k.to_sym } if fields.empty?
+      fields = hashtable.keys.map(&:to_sym) if fields.empty?
 
       fields.each do |f|
         key = f
-        key = map[f] if map.has_key?(f)
+        key = map[f] if map.key?(f)
 
-        if self.respond_to? f.to_sym
+        if respond_to? f.to_sym
           el_content = send(f).send(:value)
 
           expect(el_content).to eq hashtable[key.to_s]
         end
-
       end
     end
 
@@ -97,7 +98,6 @@ module UlePage
       else
         expect(container).to have_content(content)
       end
-
     end
 
     def check_have_not_content(content, container = nil)
@@ -157,6 +157,7 @@ module UlePage
     end
 
     private
+
     def self.add_to_page_map(urls = [])
       urls.each {|x| PageMap.instance.pages[x] = self.new } unless urls.nil?
     end
@@ -167,12 +168,11 @@ module UlePage
     end
 
     def self.set_first_url
-      if @urls.any?
-        first_url = @urls.first
-        first_url = first_url.gsub /:(\w+)/, '{\1}'
-        set_url first_url
-      end
-    end
+      return unless @urls.any?
 
+      first_url = @urls.first
+      first_url = first_url.gsub(/:(\w+)/, '{\1}')
+      set_url first_url
+    end
   end
 end
