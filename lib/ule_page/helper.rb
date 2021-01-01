@@ -25,20 +25,20 @@ module UlePage
           visit_admin_pages
           browser.manage.delete_all_cookies
         else
-          page.driver.set_cookie("remember_token", '')
+          page.driver.set_cookie('remember_token', '')
         end
       else
         if browser.respond_to?(:clear_cookies)
           # Rack::MockSession
           browser.clear_cookies
         else
-          Capybara.current_session.driver.browser.set_cookie("remember_token=")
+          Capybara.current_session.driver.browser.set_cookie('remember_token=')
         end
       end
     end
 
     def need_run_javascript
-      Capybara.current_driver == :selenium or Capybara.current_driver == Capybara.javascript_driver
+      (Capybara.current_driver == :selenium) || (Capybara.current_driver == Capybara.javascript_driver)
     end
 
     def confirm_alert
@@ -48,7 +48,7 @@ module UlePage
         sleep 1 # prevent test from failing by waiting for popup
         page.driver.browser.accept_js_confirms
       else
-        p "pressed ok"
+        p 'pressed ok'
       end
     end
 

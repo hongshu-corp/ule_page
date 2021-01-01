@@ -22,13 +22,13 @@ module UlePage
       set_first_url
     end
 
-    def self.urls
-      @urls
+    class << self
+      attr_reader :urls
     end
 
     # e.g. is_order_detail?
     def self.inherited(subclass)
-      method_name = "is_#{subclass.parent.name.demodulize.singularize.underscore}_#{subclass.name.demodulize.singularize.underscore}?"
+      method_name = "is_#{subclass.module_parent_name.demodulize.singularize.underscore}_#{subclass.name.demodulize.singularize.underscore}?"
       subclass.send(:define_method, method_name) do
         true
       end
@@ -45,7 +45,8 @@ module UlePage
     # fill_form hashtable
     # if the fields is empty, it will use all the keys of the hashtable
     def fill_form(hashtable, fields = [], map = {})
-      hashtable, map = wrapper_hash(hashtable), wrapper_hash(map)
+      hashtable = wrapper_hash(hashtable)
+      map = wrapper_hash(map)
 
       fields = hashtable.keys.map(&:to_sym) if fields.empty?
 
@@ -53,8 +54,10 @@ module UlePage
         key = f
         key = map[f] if map.key?(f)
 
-        el, val = send(f), hashtable[key]
-        tag, it = el.send(:tag_name), el.send(:[], :type)
+        el = send(f)
+        val = hashtable[key]
+        tag = el.send(:tag_name)
+        it = el.send(:[], :type)
 
         if tag == 'input' && it == 'checkbox' # checkbox
           el.send(:set, val == 'true')
@@ -75,7 +78,8 @@ module UlePage
     # precondition:
     # there are the elements mapped to the hashtable keys.
     def check_form(hashtable, fields = [], map = {})
-      hashtable, map = wrapper_hash(hashtable), wrapper_hash(map)
+      hashtable = wrapper_hash(hashtable)
+      map = wrapper_hash(map)
 
       fields = hashtable.keys.map(&:to_sym) if fields.empty?
 
@@ -83,11 +87,11 @@ module UlePage
         key = f
         key = map[f] if map.key?(f)
 
-        if respond_to? f.to_sym
-          el_content = send(f).send(:value)
+        next unless respond_to? f.to_sym
 
-          expect(el_content).to eq hashtable[key.to_s]
-        end
+        el_content = send(f).send(:value)
+
+        expect(el_content).to eq hashtable[key.to_s]
       end
     end
 
@@ -159,11 +163,12 @@ module UlePage
     private
 
     def self.add_to_page_map(urls = [])
-      urls.each {|x| PageMap.instance.pages[x] = self.new } unless urls.nil?
+      urls.each { |x| PageMap.instance.pages[x] = new } unless urls.nil?
     end
 
     def wrapper_hash(hash)
       return hash unless hash.is_a?(Hash)
+
       ActiveSupport::HashWithIndifferentAccess.new hash
     end
 

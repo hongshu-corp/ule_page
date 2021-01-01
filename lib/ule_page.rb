@@ -1,4 +1,4 @@
-require "ule_page/version"
+require 'ule_page/version'
 require 'rails'
 require 'active_record'
 require 'ule_page/page_map'
@@ -14,7 +14,6 @@ module UlePage
   autoload :Detail, 'ule_page/models/detail'
   autoload :Index, 'ule_page/models/index'
 
-
   mattr_accessor :resource_models
   @@resource_models = []
 
@@ -28,24 +27,22 @@ module UlePage
   @@map_initialized = false
 
   mattr_accessor :module_name
-  @@module_name = "Page"
+  @@module_name = 'Page'
 
   def self.setup
     UlePage::Page.send(:include, Rails.application.routes.url_helpers) if defined? Rails
     UlePage::Page.send(:include, ActionView::Helpers::NumberHelper) if defined? ActionView
 
-    self.add_models
+    add_models
 
     yield self
   end
 
   def self.add_models
-    if(defined? ActiveRecord::Base && defined? Rails)
+    if defined? ActiveRecord::Base && defined? Rails
       @@resource_models = Dir["#{Rails.root}/app/models/**/*.rb"].map do |m|
-        m.chomp('.rb').camelize.split("::").last
+        m.chomp('.rb').camelize.split('::').last
       end
     end
   end
 end
-
-

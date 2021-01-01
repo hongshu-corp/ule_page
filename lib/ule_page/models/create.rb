@@ -5,7 +5,7 @@ module UlePage
     element :create_button, 'input[type="submit"]'
 
     def submit
-      self.create_button.click
+      create_button.click
     end
   end
 end

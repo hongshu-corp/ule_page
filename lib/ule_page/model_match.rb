@@ -3,7 +3,6 @@ require 'site_prism'
 
 module UlePage
   module ModelMatch
-
     class << self
       include Capybara::DSL
       def get_current_page_with_wait(special_maps = {})
@@ -28,7 +27,7 @@ module UlePage
         current = get_model map, current_path
 
         if current.nil? && current_path.include?('/admin/')
-          current =  get_model map, current_path[6, current_path.length]
+          current = get_model map, current_path[6, current_path.length]
         end
 
         current
@@ -60,15 +59,14 @@ module UlePage
           pattern = k.gsub(/(:\w+)/, '\w+') if k.include?(':')
 
           regex = Regexp.new "^#{pattern}$"
-          if regex.match(path)
-            return v
-          end
+          return v if regex.match(path)
         end
 
         nil
       end
 
       private
+
       def generate_map_by_convention(map, resources)
         resources ||= []
         # => to generate the following
@@ -77,17 +75,32 @@ module UlePage
         # '/customers/:id' => Page::Customers::Details.new,
         # '/customers/:id/edit' => Page::Customers::Edit.new,
         resources.each do |model|
-
           pluralized = model.to_s.underscore.pluralize
           page_module_name = model.to_s.pluralize.camelize
 
           next unless Object.const_defined?("#{UlePage.module_name}::#{page_module_name}")
 
           page_module = Object.const_get(UlePage.module_name).const_get(page_module_name)
-          map["/#{pluralized}"] = page_module.const_get("Index").try(:new) rescue false
-          map["/#{pluralized}/new"] = page_module.const_get("Create").new rescue false
-          map["/#{pluralized}/:id"] = page_module.const_get("Details").new rescue false
-          map["/#{pluralized}/:id/edit"] = page_module.const_get("Edit").new rescue false
+          map["/#{pluralized}"] = begin
+                                    page_module.const_get('Index').try(:new)
+                                  rescue StandardError
+                                    false
+                                  end
+          map["/#{pluralized}/new"] = begin
+                                        page_module.const_get('Create').new
+                                      rescue StandardError
+                                        false
+                                      end
+          map["/#{pluralized}/:id"] = begin
+                                        page_module.const_get('Details').new
+                                      rescue StandardError
+                                        false
+                                      end
+          map["/#{pluralized}/:id/edit"] = begin
+                                             page_module.const_get('Edit').new
+                                           rescue StandardError
+                                             false
+                                           end
         end
       end
     end

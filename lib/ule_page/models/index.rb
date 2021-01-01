@@ -10,21 +10,23 @@ module UlePage
     end
 
     protected
+
     def key_column
-      ""
+      ''
     end
 
-    def get_row key
-      find_row key, self.rows
+    def get_row(key)
+      find_row key, rows
     end
 
-    def get_model_row model
-      find_row(model[key_column], self.rows)
+    def get_model_row(model)
+      find_row(model[key_column], rows)
     end
 
-    def get_model_row_anchor model, link_text
+    def get_model_row_anchor(model, link_text)
       row = get_model_row(model)
       raise 'can not find the row' if row.nil?
+
       row.find(:link_or_button, link_text)
     end
   end
