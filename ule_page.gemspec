@@ -30,7 +30,7 @@ Gem::Specification.new do |spec|
   spec.platform = Gem::Platform::RUBY
 
   spec.add_development_dependency 'bundler', '~> 1.11'
-  spec.add_development_dependency 'rake', '~> 10.0'
+  spec.add_development_dependency 'rake', '~> 13.0'
 
   spec.add_dependency 'activerecord', '> 4.0'
   spec.add_dependency 'activesupport', '> 4.0'
